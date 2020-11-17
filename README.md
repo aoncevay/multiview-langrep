@@ -45,28 +45,44 @@ Future feature: include your own KB-vectors as well.
 
 ### Clustering languages
 Uses the same parameters as ```langrep```. The function will print a short report, and will plot a PDF with the Elbow method, Silhouette analysis and the Dendrogram of the hierarchy.
-
-Default settings (like the Figure 2 in the paper):
 ```
+# Default settings (like the Figure 2 in the paper):
 python multiview_langrep.py cluster
-```
-To cluster Romance and Germanic languages that are included in ted53:
-```
-python multiview_langrep.py cluster --list_langs "por,spa,ita,fra,ron,glg,nld,deu,swe,eng" --out_name "romance_germanic_langs"
-```
-We can cluster Romance languages that are not included in ted53 (they are going to be projected from the KB-source):
-```
-python multiview_langrep.py cluster --list_langs "por,spa,ita,fra,ron,glg,nld,deu,swe,eng,ast,arg,scn" --out_name "romance_germanic_langs_extended"
+# To cluster only Romance languages that are included in ted53:
+python multiview_langrep.py cluster --list_langs "por,spa,ita,fra,ron,glg" --out_name "romance_langs"
+# We can cluster Romance languages that are not included in ted53 (they are going to be projected from the KB-source):
+python multiview_langrep.py cluster --list_langs "por,spa,ita,fra,ron,glg,ast,arg,scn" --out_name "romance_langs_extended"
 ```
 
 ### Ranking related languages
-Uses the same parameters as ```langrep``` (with exception of ```--list_langs```, which will be set to "all" by default), and with some specific ones:
-- ```--target_lang``` : target language for ranking (obligatory), could be more than one (separated by comma)
-- ```--candidates_extra``` : list of candidate languages to consider besides all the languages in the two sources (```--list_langs```). This does not work with ```--group_size``` or ```--filter_size```.
+Uses the same parameters as ```langrep```, but with some specific ones:
+- ```--target_lang``` : target language for ranking (obligatory)
+- ```--list_langs``` : list of candidate languages to consider (optional). By default, it will only analyse the languages included in the two sources.
 - ```--num_langs``` : rank an specific number of languages. Default = 5 (int)
-- ```--group_size``` : rank languages given an amount of training data to agglomerate (e.g. 500000). Default = -1 (disabled). Currently, it only works with ```ted53```. If enabled, it will disable ```--num_langs```. Currently, this is not enable.
-- ```--filter_size``` : the selection does not consider languages with a training size below this value (e.g. 100000). Default = -1 (disabled). Currently, this is not enable.
+- ```--group_size``` : rank languages given an amount of training data to agglomerate (e.g. 500000). Default = -1 (disabled). Currently, it only works with ted53. If enabled, it will disable ```--num_langs```
+- ```--filter_size``` : the selection does not consider languages with a training size below this value (e.g. 100000). Default = -1 (disabled). Currently, it only works with ted53.
 
 ```
-python multiview_langrep.py rank --target_lang glg --num_langs 5 
+python multiview_langrep.py rank --target_lang glg --num_langs 5 --filter_size 40000
+python multiview_langrep.py rank --target_lang glg --group_size 500000
+python multiview_langrep.py rank --target_lang glg --num_langs 2 --list_langs "por,spa,ita,fra,ron,glg,ast,arg,scn"
 ```
+
+## Cite
+```
+@inproceedings{oncevay-etal-2020-bridging,
+    title = "Bridging Linguistic Typology and Multilingual Machine Translation with Multi-View Language Representations",
+    author = "Oncevay, Arturo  and
+      Haddow, Barry  and
+      Birch, Alexandra",
+    booktitle = "Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)",
+    month = nov,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2020.emnlp-main.187",
+    pages = "2391--2406",
+}
+```
+
+Future feature(s): include your own KB-vectors as well.
